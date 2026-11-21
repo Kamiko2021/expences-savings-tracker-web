@@ -1,4 +1,4 @@
-const CACHE_NAME = 'perawise-shell-v3'
+const CACHE_NAME = 'peraetrackmo-shell-v4'
 const APP_SHELL = ['/', '/manifest.webmanifest', '/pwa-icon-192.png', '/pwa-icon-512.png']
 
 self.addEventListener('install', (event) => {

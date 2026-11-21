@@ -8,6 +8,7 @@ import {
   CircleHelp,
   ArrowRight,
   CreditCard,
+  Copy,
   Download,
   ExternalLink,
   Landmark,
@@ -16,6 +17,7 @@ import {
   Plus,
   ReceiptText,
   Search,
+  Share2,
   Settings,
   Sun,
   Target,
@@ -59,6 +61,7 @@ const peso = (value) =>
   }).format(value)
 
 const categoryPalette = ['#315d91', '#7ec8ef', '#f4b76b', '#f7d7e6', '#84b7a4', '#e58d8d']
+const appPublicUrl = 'https://expences-savings-tracker-web.vercel.app'
 
 const navItems = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -94,8 +97,8 @@ function LandingPage({ user, theme, onThemeToggle, onStart, onTutorial, onAbout,
     <main className={`landing-page ${theme}`}>
       <header className="landing-nav">
         <a className="landing-brand" href="#home">
-          <span className="brand-mark"><img src="/perawise-mark.svg" alt="" /></span>
-          <span>PeraWise</span>
+          <span className="brand-mark"><img src="/peraetrackmo-mark.svg" alt="" /></span>
+          <span>PeraETrackMo</span>
         </a>
         <nav aria-label="Landing page navigation">
           <a href="#features">Features</a>
@@ -134,9 +137,9 @@ function LandingPage({ user, theme, onThemeToggle, onStart, onTutorial, onAbout,
           <div className="landing-trust"><CheckCircle2 size={16} /><span>Private to your account</span><i /> <span>Built around your goals</span></div>
         </div>
 
-        <div className="landing-preview" aria-label="Preview of the PeraWise finance dashboard">
+        <div className="landing-preview" aria-label="Preview of the PeraETrackMo finance dashboard">
           <div className="preview-window">
-            <div className="preview-top"><span className="preview-logo"><i><img src="/perawise-mark.svg" alt="" /></i> PeraWise</span><span className="preview-avatar">K</span></div>
+            <div className="preview-top"><span className="preview-logo"><i><img src="/peraetrackmo-mark.svg" alt="" /></i> PeraETrackMo</span><span className="preview-avatar">K</span></div>
             <div className="preview-welcome"><small>YOUR FINANCIAL OVERVIEW</small><strong>A clearer view of your money.</strong></div>
             <div className="preview-balance"><span>Total balance</span><strong>₱ 84,250</strong><small>↗ Looking good this month</small></div>
             <div className="preview-stats">
@@ -159,8 +162,23 @@ function LandingPage({ user, theme, onThemeToggle, onStart, onTutorial, onAbout,
         </div>
       </section>
 
+      <section className="landing-share" id="share">
+        <div>
+          <span className="share-kicker">SHARE WITH ANYONE</span>
+          <h2>One scan brings them to PeraETrackMo.</h2>
+          <p>Scan the QR code to visit the app, explore the public landing page, and create an account to start tracking privately.</p>
+          <a className="landing-primary share-open-link" href={appPublicUrl} target="_blank" rel="noopener noreferrer">
+            Open PeraETrackMo <ExternalLink size={16} />
+          </a>
+        </div>
+        <a className="landing-qr-card" href={appPublicUrl} target="_blank" rel="noopener noreferrer" aria-label="Scan or open PeraETrackMo">
+          <img src="/perae-track-mo-app-qr.png" alt="QR code linking to the PeraETrackMo app" />
+          <span>SCAN TO VISIT PERAETRACKMO</span>
+        </a>
+      </section>
+
       <footer className="landing-footer">
-        <span className="landing-brand"><span className="brand-mark"><img src="/perawise-mark.svg" alt="" /></span> PeraWise</span>
+        <span className="landing-brand"><span className="brand-mark"><img src="/peraetrackmo-mark.svg" alt="" /></span> PeraETrackMo</span>
         <span>Your finances, a little more in focus.</span>
         <div className="landing-footer-links">
           <button onClick={onTutorial}>Read the getting-started guide <ArrowRight size={14} /></button>
@@ -175,7 +193,8 @@ function LandingPage({ user, theme, onThemeToggle, onStart, onTutorial, onAbout,
 function App() {
   const [theme, setTheme] = useState(() => {
     try {
-      const savedTheme = window.localStorage.getItem('perawise-theme')
+      const savedTheme = window.localStorage.getItem('peraetrackmo-theme')
+        || window.localStorage.getItem('perawise-theme')
         || window.localStorage.getItem('finora-theme')
       return savedTheme === 'dark' ? 'dark' : 'light'
     } catch (error) {
@@ -201,6 +220,7 @@ function App() {
   const [showInstallHelp, setShowInstallHelp] = useState(false)
   const [releaseInfo, setReleaseInfo] = useState({ updateUrl: '', versionCode: null })
   const [releaseError, setReleaseError] = useState('')
+  const [appLinkCopied, setAppLinkCopied] = useState(false)
 
   const [debts, setDebts] = useState([])
 
@@ -208,7 +228,7 @@ function App() {
 
   useEffect(() => {
     try {
-      window.localStorage.setItem('perawise-theme', theme)
+      window.localStorage.setItem('peraetrackmo-theme', theme)
     } catch (error) {
       console.error('The theme preference could not be saved:', error)
     }
@@ -509,6 +529,18 @@ function App() {
     else setEntryModal('auth')
   }
 
+  const copyAppLink = async () => {
+    try {
+      await navigator.clipboard.writeText(appPublicUrl)
+      setAppLinkCopied(true)
+      setConnectionError('')
+    } catch (error) {
+      console.error('The PeraETrackMo link could not be copied:', error)
+      setConnectionError('Could not copy the app link. Use the QR code or open the link directly.')
+      setAppLinkCopied(false)
+    }
+  }
+
   const installApp = async () => {
     if (isInstalled) return
     if (!installPrompt) {
@@ -548,9 +580,9 @@ function App() {
   return (
     <div className={`app-shell ${theme}`}>
       <aside className="sidebar">
-        <button className="brand" onClick={() => setShowLanding(true)} aria-label="Go to PeraWise home">
-         <span className="brand-mark"><img src="/perawise-mark.svg" alt="" /></span>
-         <span>PeraWise</span>
+        <button className="brand" onClick={() => setShowLanding(true)} aria-label="Go to PeraETrackMo home">
+         <span className="brand-mark"><img src="/peraetrackmo-mark.svg" alt="" /></span>
+         <span>PeraETrackMo</span>
         </button>
 
         <nav className="primary-nav" aria-label="Main navigation">
@@ -571,6 +603,7 @@ function App() {
 
         <div className="sidebar-bottom">
           <button onClick={() => setActiveNav('tutorial')}><CircleHelp size={19} /><span>Help & tutorial</span></button>
+          <button onClick={() => setActiveNav('share')}><Share2 size={19} /><span>Share PeraETrackMo</span></button>
           <button><Settings size={19} /><span>Settings</span></button>
           <button className="profile profile-button" onClick={() => setEntryModal('auth')}>
             <AccountAvatar user={auth.currentUser} />
@@ -586,9 +619,10 @@ function App() {
             <p className={`eyebrow ${connectionError ? 'connection-error' : ''}`}>
               {connectionError || 'Saturday, November 22'}
             </p>
-            <h1>{activeNav === 'overview' ? `Good morning${auth.currentUser?.displayName ? `, ${auth.currentUser.displayName.split(' ')[0]}` : ''}` : navItems.find((item) => item.id === activeNav)?.label}</h1>
+            <h1>{activeNav === 'overview' ? `Good morning${auth.currentUser?.displayName ? `, ${auth.currentUser.displayName.split(' ')[0]}` : ''}` : activeNav === 'share' ? 'Share PeraETrackMo' : navItems.find((item) => item.id === activeNav)?.label}</h1>
           </div>
           <div className="topbar-actions">
+            <button className="icon-button share-mobile-button" aria-label="Share PeraETrackMo" title="Share PeraETrackMo" onClick={() => setActiveNav('share')}><Share2 size={18} /></button>
             <button className="icon-button" aria-label="Search"><Search size={19} /></button>
             <button className="icon-button" aria-label="Notifications"><Bell size={19} /><span className="notice-dot" /></button>
             <button className="icon-button account-mobile-button" aria-label="Account" onClick={() => setEntryModal('auth')}><AccountAvatar user={auth.currentUser} compact /></button>
@@ -608,7 +642,7 @@ function App() {
             <div className="tutorial-intro">
               <span className="tutorial-kicker"><BookOpen size={15} /> QUICK START GUIDE</span>
               <h2>A few steps to feel at home.</h2>
-              <p>Set up your account, add your money activity, then let PeraWise help you follow your plan.</p>
+              <p>Set up your account, add your money activity, then let PeraETrackMo help you follow your plan.</p>
             </div>
             <div className="tutorial-steps">
               <article className="tutorial-step">
@@ -639,9 +673,9 @@ function App() {
         {activeNav === 'about' && (
           <section className="about-page">
             <div className="about-intro">
-              <span className="tutorial-kicker"><UserRound size={15} /> ABOUT FINORA</span>
+              <span className="tutorial-kicker"><UserRound size={15} /> ABOUT PERAETRACKMO</span>
               <h2>Built to make money feel a little clearer.</h2>
-              <p>PeraWise brings everyday spending, savings goals, debts, and bills together in one place.</p>
+              <p>PeraETrackMo brings everyday spending, savings goals, debts, and bills together in one place.</p>
             </div>
             <article className="about-developer-card">
               <div className="about-avatar" aria-hidden="true">KL</div>
@@ -661,6 +695,22 @@ function App() {
                 <br /><strong>GCash:</strong> 09998901910
               </p>
             </div>
+          </section>
+        )}
+
+        {activeNav === 'share' && (
+          <section className="share-app-page page-panel">
+            <div className="share-app-copy">
+              <span className="tutorial-kicker"><Share2 size={15} /> SHARE PERAETRACKMO</span>
+              <h2>Invite someone to take control of their money.</h2>
+              <p>PeraETrackMo is free to visit. Share this QR code so anyone can open the app, explore it, and create their own private account.</p>
+              <a href={appPublicUrl} target="_blank" rel="noopener noreferrer">{appPublicUrl} <ExternalLink size={15} /></a>
+              <button className="add-button" onClick={copyAppLink}><Copy size={16} /> {appLinkCopied ? 'Link copied' : 'Copy app link'}</button>
+            </div>
+            <a className="share-app-qr" href={appPublicUrl} target="_blank" rel="noopener noreferrer" aria-label="Open the PeraETrackMo app">
+            <img src="/perae-track-mo-app-qr.png" alt="QR code linking to the PeraETrackMo app" />
+            <span>SCAN TO VISIT PERAETRACKMO</span>
+            </a>
           </section>
         )}
 
@@ -933,7 +983,7 @@ function App() {
               <div className="modal-backdrop" role="presentation" onMouseDown={() => setShowInstallHelp(false)}>
                 <section className="modal install-modal" role="dialog" aria-modal="true" aria-labelledby="install-title" onMouseDown={(event) => event.stopPropagation()}>
                   <div className="modal-heading">
-                    <div><p>PERAWISE WEB APP</p><h2 id="install-title">Add PeraWise to your home screen</h2></div>
+                    <div><p>PERAETRACKMO WEB APP</p><h2 id="install-title">Add PeraETrackMo to your home screen</h2></div>
                     <button onClick={() => setShowInstallHelp(false)} aria-label="Close"><X size={20} /></button>
                   </div>
                   <div className="install-instructions">

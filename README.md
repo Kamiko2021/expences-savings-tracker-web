@@ -1,4 +1,4 @@
-# PeraWise savings & expense tracker
+# PeraETrackMo savings & expense tracker
 
 A React + Vite finance dashboard backed by Firebase Authentication and Cloud Firestore.
 
@@ -63,7 +63,7 @@ Optional:
 
 ## Firestore collections and features
 
-- PeraWise public landing page with feature overview, plus a built-in five-step usage tutorial.
+- PeraETrackMo public landing page with feature overview, plus a built-in five-step usage tutorial.
 - Installable Android-friendly PWA with a home-screen install prompt, offline app-shell fallback, and Add to Home Screen instructions.
 - Android APK release link and version loaded from Firebase Remote Config (`update_url`, `latest_version_code`).
 - `transactions`, `savings_accounts`, `debts`, and `bills`, scoped by `userId`.
