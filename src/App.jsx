@@ -9,6 +9,7 @@ import {
   ArrowRight,
   CreditCard,
   Download,
+  ExternalLink,
   Landmark,
   LayoutDashboard,
   Moon,
@@ -67,6 +68,7 @@ const navItems = [
   { id: 'debts', label: 'Debts & Loans', icon: CreditCard },
   { id: 'bills', label: 'Bills', icon: WalletCards },
   { id: 'advisor', label: 'AI Advisor', icon: Sparkles },
+  { id: 'about', label: 'About', icon: UserRound },
 ]
 
 function AccountAvatar({ user, compact = false }) {
@@ -87,17 +89,22 @@ function AccountAvatar({ user, compact = false }) {
   )
 }
 
-function LandingPage({ user, onStart, onTutorial, onInstall, isInstalled, releaseInfo, releaseError }) {
+function LandingPage({ user, theme, onThemeToggle, onStart, onTutorial, onAbout, onInstall, isInstalled, releaseInfo, releaseError }) {
   return (
-    <main className="landing-page">
+    <main className={`landing-page ${theme}`}>
       <header className="landing-nav">
         <a className="landing-brand" href="#home">
-          <span className="brand-mark"><span /></span>
-          <span>Finora</span>
+          <span className="brand-mark"><img src="/perawise-mark.svg" alt="" /></span>
+          <span>PeraWise</span>
         </a>
         <nav aria-label="Landing page navigation">
           <a href="#features">Features</a>
           <button onClick={onTutorial}>How it works</button>
+          <button onClick={onAbout}>About</button>
+          <button className="landing-theme-toggle" onClick={onThemeToggle} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
+            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+            <span>{theme === 'light' ? 'Dark mode' : 'Light mode'}</span>
+          </button>
           {releaseInfo.updateUrl && (
             <a className="landing-install" href={releaseInfo.updateUrl} target="_blank" rel="noreferrer">
               <Download size={14} /> Android APK{releaseInfo.versionCode ? ` · v${releaseInfo.versionCode}` : ''}
@@ -127,9 +134,9 @@ function LandingPage({ user, onStart, onTutorial, onInstall, isInstalled, releas
           <div className="landing-trust"><CheckCircle2 size={16} /><span>Private to your account</span><i /> <span>Built around your goals</span></div>
         </div>
 
-        <div className="landing-preview" aria-label="Preview of the Finora finance dashboard">
+        <div className="landing-preview" aria-label="Preview of the PeraWise finance dashboard">
           <div className="preview-window">
-            <div className="preview-top"><span className="preview-logo"><i /> Finora</span><span className="preview-avatar">K</span></div>
+            <div className="preview-top"><span className="preview-logo"><i><img src="/perawise-mark.svg" alt="" /></i> PeraWise</span><span className="preview-avatar">K</span></div>
             <div className="preview-welcome"><small>YOUR FINANCIAL OVERVIEW</small><strong>A clearer view of your money.</strong></div>
             <div className="preview-balance"><span>Total balance</span><strong>₱ 84,250</strong><small>↗ Looking good this month</small></div>
             <div className="preview-stats">
@@ -153,16 +160,29 @@ function LandingPage({ user, onStart, onTutorial, onInstall, isInstalled, releas
       </section>
 
       <footer className="landing-footer">
-        <span className="landing-brand"><span className="brand-mark"><span /></span> Finora</span>
+        <span className="landing-brand"><span className="brand-mark"><img src="/perawise-mark.svg" alt="" /></span> PeraWise</span>
         <span>Your finances, a little more in focus.</span>
-        <button onClick={onTutorial}>Read the getting-started guide <ArrowRight size={14} /></button>
+        <div className="landing-footer-links">
+          <button onClick={onTutorial}>Read the getting-started guide <ArrowRight size={14} /></button>
+          <button onClick={onAbout}>About the developer <ArrowRight size={14} /></button>
+          <a href="/eula.html">End User License Agreement</a>
+        </div>
       </footer>
     </main>
   )
 }
 
 function App() {
-  const [theme, setTheme] = useState('light')
+  const [theme, setTheme] = useState(() => {
+    try {
+      const savedTheme = window.localStorage.getItem('perawise-theme')
+        || window.localStorage.getItem('finora-theme')
+      return savedTheme === 'dark' ? 'dark' : 'light'
+    } catch (error) {
+      console.error('The saved theme preference could not be read:', error)
+      return 'light'
+    }
+  })
   const [showLanding, setShowLanding] = useState(true)
   const [activeNav, setActiveNav] = useState('overview')
   const [transactions, setTransactions] = useState([])
@@ -173,7 +193,6 @@ function App() {
   const [connectionError, setConnectionError] = useState('')
   const [savingAmount, setSavingAmount] = useState(8000)
   const [allocationSource, setAllocationSource] = useState('Manual amount')
-  const [advisorKey, setAdvisorKey] = useState('')
   const [advisorResult, setAdvisorResult] = useState(null)
   const [advisorLoading, setAdvisorLoading] = useState(false)
   const [authMode, setAuthMode] = useState('register')
@@ -186,6 +205,14 @@ function App() {
   const [debts, setDebts] = useState([])
 
   const [goals, setGoals] = useState([])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('perawise-theme', theme)
+    } catch (error) {
+      console.error('The theme preference could not be saved:', error)
+    }
+  }, [theme])
 
   useEffect(() => {
     const standaloneQuery = window.matchMedia('(display-mode: standalone)')
@@ -450,14 +477,15 @@ function App() {
 
   const requestAdvice = async (event) => {
     event.preventDefault()
-    if (!advisorKey.trim()) {
-      setConnectionError('Enter your Gemini API key to request advice.')
+    if (!auth.currentUser) {
+      setConnectionError('Sign in to use the financial advisor.')
       return
     }
     setAdvisorLoading(true)
     try {
+      const idToken = await auth.currentUser.getIdToken()
       const { getAIFinancialAdvice } = await import('./aiAdvisor')
-      const advice = await getAIFinancialAdvice(advisorKey.trim(), JSON.stringify({
+      const advice = await getAIFinancialAdvice(idToken, {
         income: budget.income,
         livingTarget: budget.livingTarget,
         livingActual: budget.livingActual,
@@ -465,7 +493,7 @@ function App() {
         savingsActual: budget.savingsActual,
         extraTarget: budget.extraTarget,
         extraActual: budget.extraActual,
-      }))
+      })
       setAdvisorResult(advice)
       setConnectionError('')
     } catch (error) {
@@ -504,8 +532,11 @@ function App() {
     return (
       <LandingPage
         user={auth.currentUser}
+        theme={theme}
+        onThemeToggle={() => setTheme((currentTheme) => currentTheme === 'light' ? 'dark' : 'light')}
         onStart={startUsingApp}
         onTutorial={() => { setShowLanding(false); setActiveNav('tutorial') }}
+        onAbout={() => { setShowLanding(false); setActiveNav('about') }}
         onInstall={installApp}
         isInstalled={isInstalled}
         releaseInfo={releaseInfo}
@@ -517,9 +548,9 @@ function App() {
   return (
     <div className={`app-shell ${theme}`}>
       <aside className="sidebar">
-        <button className="brand" onClick={() => setShowLanding(true)} aria-label="Go to Finora home">
-          <span className="brand-mark"><span /></span>
-          <span>Finora</span>
+        <button className="brand" onClick={() => setShowLanding(true)} aria-label="Go to PeraWise home">
+         <span className="brand-mark"><img src="/perawise-mark.svg" alt="" /></span>
+         <span>PeraWise</span>
         </button>
 
         <nav className="primary-nav" aria-label="Main navigation">
@@ -563,8 +594,8 @@ function App() {
             <button className="icon-button account-mobile-button" aria-label="Account" onClick={() => setEntryModal('auth')}><AccountAvatar user={auth.currentUser} compact /></button>
             <button
               className="icon-button"
-              aria-label="Toggle theme"
-              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              onClick={() => setTheme((currentTheme) => currentTheme === 'light' ? 'dark' : 'light')}
             >
               {theme === 'light' ? <Moon size={19} /> : <Sun size={19} />}
             </button>
@@ -577,7 +608,7 @@ function App() {
             <div className="tutorial-intro">
               <span className="tutorial-kicker"><BookOpen size={15} /> QUICK START GUIDE</span>
               <h2>A few steps to feel at home.</h2>
-              <p>Set up your account, add your money activity, then let Finora help you follow your plan.</p>
+              <p>Set up your account, add your money activity, then let PeraWise help you follow your plan.</p>
             </div>
             <div className="tutorial-steps">
               <article className="tutorial-step">
@@ -602,6 +633,34 @@ function App() {
               </article>
             </div>
             <div className="tutorial-finish"><CheckCircle2 size={18} /><span><strong>That’s the basics.</strong> You can return to this guide any time from Help & tutorial.</span></div>
+          </section>
+        )}
+
+        {activeNav === 'about' && (
+          <section className="about-page">
+            <div className="about-intro">
+              <span className="tutorial-kicker"><UserRound size={15} /> ABOUT FINORA</span>
+              <h2>Built to make money feel a little clearer.</h2>
+              <p>PeraWise brings everyday spending, savings goals, debts, and bills together in one place.</p>
+            </div>
+            <article className="about-developer-card">
+              <div className="about-avatar" aria-hidden="true">KL</div>
+              <div className="about-developer-copy">
+                <span>DEVELOPER</span>
+                <h3>Karl Michael Lopez</h3>
+                <p>Visit my portfolio to learn more about my work and projects.</p>
+                <a href="https://karlmichaellopez.vercel.app" target="_blank" rel="noopener noreferrer">
+                  View my portfolio <ExternalLink size={16} />
+                </a>
+              </div>
+            </article>
+            <div className="about-note">
+              <strong>Free for everyone</strong>
+              <p>
+                This application is free for everyone. If you’d like to support future improvements, any amount is appreciated. Thank you!
+                <br /><strong>GCash:</strong> 09998901910
+              </p>
+            </div>
           </section>
         )}
 
@@ -834,9 +893,8 @@ function App() {
               <h2>Your personal money check-in</h2>
               <p>Get a roadmap based on your transaction totals and the 70/20/10 framework.</p>
               <form className="advisor-form" onSubmit={requestAdvice}>
-                <label>Gemini API key<input type="password" autoComplete="off" value={advisorKey} onChange={(event) => setAdvisorKey(event.target.value)} placeholder="Paste your Gemini API key" /></label>
-                <small>Your key is used in this browser session only and is not saved to Firestore.</small>
-                <button className="add-button" disabled={advisorLoading}>{advisorLoading ? 'Generating…' : 'Generate advice'}</button>
+                <small>Your financial summary is sent securely to the configured AI service. Sign in is required; API credentials stay on the server.</small>
+                <button className="add-button" disabled={advisorLoading || !userId}>{advisorLoading ? 'Generating…' : 'Generate advice'}</button>
               </form>
               {advisorResult && (
                 <div className="advice-result">
@@ -875,7 +933,7 @@ function App() {
               <div className="modal-backdrop" role="presentation" onMouseDown={() => setShowInstallHelp(false)}>
                 <section className="modal install-modal" role="dialog" aria-modal="true" aria-labelledby="install-title" onMouseDown={(event) => event.stopPropagation()}>
                   <div className="modal-heading">
-                    <div><p>FINORA WEB APP</p><h2 id="install-title">Add Finora to your home screen</h2></div>
+                    <div><p>PERAWISE WEB APP</p><h2 id="install-title">Add PeraWise to your home screen</h2></div>
                     <button onClick={() => setShowInstallHelp(false)} aria-label="Close"><X size={20} /></button>
                   </div>
                   <div className="install-instructions">
@@ -927,6 +985,12 @@ function App() {
                 <p className="auth-description">{auth.currentUser?.isAnonymous ? 'Create an email account to link it to this anonymous profile and keep its Firebase data.' : auth.currentUser ? 'Manage your Firebase account.' : 'Create an email/password account or sign in to sync your data.'}</p>
                 <label>Email<input name="email" type="email" autoComplete="email" required placeholder="you@example.com" /></label>
                 <label>Password<input name="password" type="password" autoComplete={authMode === 'register' ? 'new-password' : 'current-password'} minLength="6" required /></label>
+                {authMode === 'register' && (
+                  <label className="eula-consent">
+                    <input name="acceptEula" type="checkbox" required />
+                    <span>I agree to the <a href="/eula.html" target="_blank" rel="noopener noreferrer">End User License Agreement</a>.</span>
+                  </label>
+                )}
                 <button className="submit-button" type="submit">{authMode === 'register' ? 'Create / link account' : 'Sign in'}</button>
                 <button className="auth-switch" type="button" onClick={() => setAuthMode(authMode === 'register' ? 'login' : 'register')}>{authMode === 'register' ? 'Already have an account? Sign in' : 'Need an account? Create one'}</button>
                 {auth.currentUser && !auth.currentUser.isAnonymous && <button className="auth-switch" type="button" onClick={async () => { await logoutAccount(); setEntryModal('') }}>Sign out</button>}

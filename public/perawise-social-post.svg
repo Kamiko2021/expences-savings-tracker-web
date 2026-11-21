@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" fill="none">
+  <defs>
+    <linearGradient id="background" x1="83" y1="71" x2="979" y2="1009" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="1" stop-color="#E9F0F8"/>
+    </linearGradient>
+    <linearGradient id="navy" x1="112" y1="172" x2="632" y2="789" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#244A78"/>
+      <stop offset="1" stop-color="#102744"/>
+    </linearGradient>
+    <filter id="shadow" x="416" y="356" width="586" height="493" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="17"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.063 0 0 0 0 0.153 0 0 0 0 0.267 0 0 0 0.15 0"/>
+      <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow"/>
+      <feBlend in="SourceGraphic" in2="effect1_dropShadow" mode="normal" result="shape"/>
+    </filter>
+  </defs>
+  <rect width="1080" height="1080" rx="48" fill="url(#background)"/>
+  <circle cx="1018" cy="112" r="205" fill="#D9E5F2" fill-opacity=".72"/>
+  <circle cx="74" cy="1008" r="205" fill="#D9E5F2" fill-opacity=".7"/>
+  <path d="M0 815C177 742 308 826 454 794C633 755 793 631 1080 687V1080H0V815Z" fill="#E0EAF5" fill-opacity=".62"/>
+
+  <g transform="translate(82 82)">
+    <rect width="54" height="54" rx="16" fill="#18345B"/>
+    <path d="M16 42V10H31C39 10 44 15 44 22C44 29 39 34 31 34H23" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M25 42L34 33L40 38L50 26" stroke="#B9CDE3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="70" y="39" fill="#172A46" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" letter-spacing="-1">PeraWise</text>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="83" y="186" width="206" height="36" rx="18" fill="#E2EBF5"/>
+    <circle cx="105" cy="204" r="5" fill="#6D9E85"/>
+    <text x="120" y="209" fill="#42668E" font-size="13" font-weight="800" letter-spacing="1.8">YOUR MONEY, WITH A PLAN</text>
+
+    <text x="82" y="300" fill="#172A46" font-size="66" font-weight="760" letter-spacing="-2.7">Make room for</text>
+    <text x="82" y="374" fill="#426A99" font-size="66" font-weight="760" letter-spacing="-2.7">what matters.</text>
+    <text x="85" y="424" fill="#68778B" font-size="21" font-weight="450">Track spending, grow savings,</text>
+    <text x="85" y="454" fill="#68778B" font-size="21" font-weight="450">and stay focused on your goals.</text>
+  </g>
+
+  <g transform="translate(16 0)" filter="url(#shadow)">
+    <rect x="475" y="389" width="473" height="381" rx="25" fill="white"/>
+    <path d="M500 390H923C936.807 390 948 401.193 948 415V455H475V415C475 401.193 486.193 390 500 390Z" fill="#F8FAFD"/>
+    <circle cx="505" cy="423" r="5" fill="#D4DCE7"/>
+    <circle cx="523" cy="423" r="5" fill="#D4DCE7"/>
+    <circle cx="541" cy="423" r="5" fill="#D4DCE7"/>
+    <text x="570" y="428" fill="#2B405D" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="800">Your financial overview</text>
+
+    <rect x="506" y="480" width="410" height="110" rx="16" fill="url(#navy)"/>
+    <text x="529" y="512" fill="#CEDCEE" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">TOTAL BALANCE</text>
+    <text x="529" y="559" fill="white" font-family="Inter, Arial, sans-serif" font-size="35" font-weight="750">₱ 84,250</text>
+    <path d="M850 546L866 529L878 539L899 514" stroke="#9CCBAA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M890 514H899V523" stroke="#9CCBAA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="506" y="608" width="194" height="86" rx="14" fill="#F5F8FC"/>
+    <text x="526" y="634" fill="#8491A2" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="650">MONTHLY INCOME</text>
+    <text x="526" y="670" fill="#263B56" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="750">₱ 42,000</text>
+    <circle cx="671" cy="630" r="10" fill="#E5F0E8"/>
+    <path d="M667 633L671 628L675 631L679 625" stroke="#6D9E85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <rect x="717" y="608" width="199" height="86" rx="14" fill="#F5F8FC"/>
+    <text x="737" y="634" fill="#8491A2" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="650">SAVINGS GOAL</text>
+    <text x="737" y="670" fill="#263B56" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="750">68% saved</text>
+    <rect x="737" y="681" width="158" height="5" rx="2.5" fill="#DDE6F0"/>
+    <rect x="737" y="681" width="107" height="5" rx="2.5" fill="#6D9E85"/>
+
+    <rect x="506" y="712" width="410" height="35" rx="10" fill="#EEF3F9"/>
+    <circle cx="525" cy="729" r="6" fill="#426A99"/>
+    <text x="540" y="734" fill="#50627A" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700">A clear plan for every peso.</text>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="84" y="534" fill="#243A57" font-size="17" font-weight="800" letter-spacing=".5">TOOLS TO HELP YOU</text>
+    <g transform="translate(83 556)">
+      <rect width="312" height="50" rx="13" fill="white"/>
+      <circle cx="27" cy="25" r="14" fill="#EAF0F8"/>
+      <path d="M22 25H32M27 20V30" stroke="#315D91" stroke-width="2.3" stroke-linecap="round"/>
+      <text x="52" y="30" fill="#34445B" font-size="15" font-weight="700">Track income &amp; expenses</text>
+    </g>
+    <g transform="translate(83 618)">
+      <rect width="312" height="50" rx="13" fill="white"/>
+      <circle cx="27" cy="25" r="14" fill="#EAF3ED"/>
+      <path d="M27 17V33M21 21H30C33 21 33 26 30 26H24C21 26 21 31 24 31H33" stroke="#6D9E85" stroke-width="2" stroke-linecap="round"/>
+      <text x="52" y="30" fill="#34445B" font-size="15" font-weight="700">Build savings goals</text>
+    </g>
+    <g transform="translate(83 680)">
+      <rect width="312" height="50" rx="13" fill="white"/>
+      <circle cx="27" cy="25" r="14" fill="#F7F0E7"/>
+      <path d="M21 21H33M21 25H33M21 29H29" stroke="#B9854D" stroke-width="2" stroke-linecap="round"/>
+      <text x="52" y="30" fill="#34445B" font-size="15" font-weight="700">Plan budgets &amp; payments</text>
+    </g>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="83" y="789" width="914" height="144" rx="22" fill="#18345B"/>
+    <text x="117" y="837" fill="#BFD2E8" font-size="13" font-weight="800" letter-spacing="1.7">SIMPLE FRAMEWORKS. YOUR OWN PACE.</text>
+    <text x="117" y="879" fill="white" font-size="27" font-weight="750">70 / 20 / 10 budget guide</text>
+    <path d="M579 810V912" stroke="#527096" stroke-width="1.5"/>
+    <text x="614" y="833" fill="#D8E5F3" font-size="16" font-weight="700">40 / 20 / 20 / 20</text>
+    <text x="614" y="858" fill="#BFD2E8" font-size="13" font-weight="500">A practical savings allocation guide</text>
+    <rect x="790" y="878" width="176" height="36" rx="18" fill="#DCE9F6"/>
+    <text x="878" y="901" text-anchor="middle" fill="#18345B" font-size="12" font-weight="800">FREE FOR EVERYONE</text>
+
+    <text x="84" y="961" fill="#172A46" font-size="17" font-weight="800">PeraWise</text>
+    <text x="84" y="987" fill="#78879A" font-size="13" font-weight="500">Your finances, a little more in focus.</text>
+    <text x="996" y="961" text-anchor="end" fill="#78879A" font-size="12" font-weight="650">MADE BY KARL MICHAEL LOPEZ</text>
+    <text x="996" y="986" text-anchor="end" fill="#315D91" font-size="13" font-weight="700">karlmichaellopez.vercel.app</text>
+  </g>
+</svg>

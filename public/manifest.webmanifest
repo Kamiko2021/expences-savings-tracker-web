@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "Finora - Savings & Expense Tracker",
-  "short_name": "Finora",
+  "name": "PeraWise - Savings & Expense Tracker",
+  "short_name": "PeraWise",
   "description": "Track expenses, savings goals, debts, and bills.",
   "start_url": "/",
   "scope": "/",

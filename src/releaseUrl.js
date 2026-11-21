@@ -18,7 +18,7 @@ export const validateAndroidReleaseUrl = (value) => {
     || url.hash
     || !RELEASE_PATH.test(url.pathname)
   ) {
-    throw new Error('Remote Config update_url must point to an APK in the official Finora GitHub releases.')
+    throw new Error('Remote Config update_url must point to an APK in the configured GitHub releases.')
   }
 
   return url.href

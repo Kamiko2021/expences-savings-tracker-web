@@ -1,4 +1,4 @@
-const CACHE_NAME = 'finora-shell-v2'
+const CACHE_NAME = 'perawise-shell-v3'
 const APP_SHELL = ['/', '/manifest.webmanifest', '/pwa-icon-192.png', '/pwa-icon-512.png']
 
 self.addEventListener('install', (event) => {

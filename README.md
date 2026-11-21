@@ -1,4 +1,4 @@
-# Finora savings & expense tracker
+# PeraWise savings & expense tracker
 
 A React + Vite finance dashboard backed by Firebase Authentication and Cloud Firestore.
 
@@ -63,7 +63,7 @@ Optional:
 
 ## Firestore collections and features
 
-- Public landing page with feature overview, plus a built-in five-step usage tutorial.
+- PeraWise public landing page with feature overview, plus a built-in five-step usage tutorial.
 - Installable Android-friendly PWA with a home-screen install prompt, offline app-shell fallback, and Add to Home Screen instructions.
 - Android APK release link and version loaded from Firebase Remote Config (`update_url`, `latest_version_code`).
 - `transactions`, `savings_accounts`, `debts`, and `bills`, scoped by `userId`.
@@ -71,7 +71,10 @@ Optional:
 - Savings allocation calculator (40/20/20/20), target dates, and daily/weekly/monthly deposit plans.
 - Debt schedules starting one month after the start date; payments and collections write the debt update and transaction atomically.
 - Bill creation and payment recording.
-- Optional Gemini advice. The API key entered on the advisor page stays in page state and is sent from the browser; restrict the key and do not use a privileged server key there.
+- Optional Gemini advice. Configure a replacement Gemini API key as the server-only `GEMINI_API_KEY` environment variable in Vercel, then redeploy. Do not prefix it with `VITE_`, commit it, or put it in client-side code. The default model is `gemini-3.5-flash-lite`; set `GEMINI_MODEL` to another model enabled for your API key if necessary.
+- The Vercel `/api/advisor` endpoint requires a valid Firebase sign-in token and checks it with Firebase Authentication before calling Gemini. For local API testing, use `vercel dev` after setting `GEMINI_API_KEY` and the Firebase web API key in the local environment. Restrict the Gemini key and set usage quotas in Google AI Studio/Google Cloud.
+- If the advisor fails, restart the local dev server after changing `.env`. The API returns separate guidance for invalid keys, permission/API access, unavailable models, and quota/rate limits. In Vercel, verify `GEMINI_API_KEY` and `GEMINI_MODEL` are set for the deployed environment and redeploy after changing them. Check available models through Google AI Studio or the Gemini API `models.list` endpoint for the same key.
+- A draft End User License Agreement is available at `/eula.html`; new account registration requires acceptance. Review and complete the legal-contact placeholder and jurisdiction details with a qualified lawyer before public launch. The EULA is not a privacy policy.
 
 Run `npm run lint` and `npm run build` to validate the app.
 
