@@ -1,11 +1,11 @@
-export const getAIFinancialAdvice = async (idToken, financialSummary) => {
+export const getAIFinancialAdvice = async (idToken, financialData) => {
   const response = await fetch('/api/advisor', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${idToken}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ financialSummary }),
+    body: JSON.stringify(financialData),
   })
 
   const result = await response.json().catch(() => ({}))

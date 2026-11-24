@@ -506,13 +506,64 @@ function App() {
       const idToken = await auth.currentUser.getIdToken()
       const { getAIFinancialAdvice } = await import('./aiAdvisor')
       const advice = await getAIFinancialAdvice(idToken, {
-        income: budget.income,
-        livingTarget: budget.livingTarget,
-        livingActual: budget.livingActual,
-        savingsTarget: budget.savingsTarget,
-        savingsActual: budget.savingsActual,
-        extraTarget: budget.extraTarget,
-        extraActual: budget.extraActual,
+        financialSummary: {
+          income: budget.income,
+          livingTarget: budget.livingTarget,
+          livingActual: budget.livingActual,
+          savingsTarget: budget.savingsTarget,
+          savingsActual: budget.savingsActual,
+          extraTarget: budget.extraTarget,
+          extraActual: budget.extraActual,
+        },
+        balances: {
+          available: Math.max(0, transactions.reduce((sum, transaction) => (
+            sum + (transaction.type === 'SAVINGS'
+              ? -Math.abs(transaction.amount)
+              : transaction.amount)
+          ), 0)),
+          savings: goals.reduce((sum, goal) => sum + goal.balance, 0),
+        },
+        savingsAccounts: goals.map(({ name, category, balance, target, targetDate }) => ({
+          name,
+          category,
+          balance,
+          target,
+          targetDate,
+        })),
+        debts: debts.map(({ name, type, total, paid, installmentAmount }) => ({
+          name,
+          type,
+          total,
+          paid,
+          remaining: Math.max(0, total - paid),
+          installmentAmount,
+        })),
+        bills: bills.map(({ name, category, amount, frequency, isPaid }) => ({
+          name,
+          category,
+          amount: Number(amount || 0),
+          frequency,
+          isPaid: Boolean(isPaid),
+        })),
+        transactions: transactions.map(({
+          id,
+          name,
+          category,
+          amount,
+          type,
+          source,
+          date,
+          timestampMs,
+        }) => ({
+          id,
+          name,
+          category,
+          amount,
+          type,
+          source,
+          date,
+          timestampMs,
+        })),
       })
       setAdvisorResult(advice)
       setConnectionError('')
@@ -941,9 +992,9 @@ function App() {
             <section className="page-panel advisor-page">
               <div className="placeholder-icon"><Sparkles size={26} /></div>
               <h2>Your personal money check-in</h2>
-              <p>Get a roadmap based on your transaction totals and the 70/20/10 framework.</p>
+              <p>Get a roadmap based on your full transaction history, balances, savings goals, debts, and the 70/20/10 framework.</p>
               <form className="advisor-form" onSubmit={requestAdvice}>
-                <small>Your financial summary is sent securely to the configured AI service. Sign in is required; API credentials stay on the server.</small>
+                <small>Your financial summary and transaction history are sent securely to the configured AI service. Sign in is required; API credentials stay on the server.</small>
                 <button className="add-button" disabled={advisorLoading || !userId}>{advisorLoading ? 'Generating…' : 'Generate advice'}</button>
               </form>
               {advisorResult && (
